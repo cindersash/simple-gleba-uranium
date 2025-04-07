@@ -1,0 +1,37 @@
+name: Create Release Zip
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  zip-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up zip file name
+        id: zipinfo
+        run: |
+          PROJECT_NAME="simple-gleba-uranium"
+          ZIP_NAME="${PROJECT_NAME}_${GITHUB_REF##*/}.zip"
+          echo "ZIP_NAME=${ZIP_NAME}" >> $GITHUB_ENV
+          echo "PROJECT_NAME=${PROJECT_NAME}" >> $GITHUB_ENV
+
+      - name: Create zip archive
+        run: |
+          mkdir -p "${PROJECT_NAME}"
+          rsync -av --exclude .git/ --exclude .github/ --exclude util/ --exclude .gitignore ./ "${PROJECT_NAME}/"
+          zip -r "$ZIP_NAME" ${PROJECT_NAME}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          files: ${{ env.ZIP_NAME }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,11 @@
+{
+  "name": "simple-gleba-uranium",
+  "version": "1.0.0",
+  "title": "Simple Gleba Uranium",
+  "author": "cindersofash",
+  "contact": "cinders.of.ash@gmail.com",
+  "factorio_version": "2.0",
+  "dependencies": ["base >= 2.0"],
+  "space_travel_required": true,
+  "description": "Adds uranium bacteria to enable easy nuclear energy production on Gleba."
+}
